@@ -36,7 +36,7 @@ export default function Flashcard() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center w-full md:w-[500px] min-h-[90vh] h-auto bg-slate-100 rounded-lg shadow p-4">
+    <div className="flex flex-col items-center w-full md:w-[500px] min-h-[70vh] h-auto bg-slate-100 rounded-lg shadow p-4">
       <button
         onClick={fetchNewWord}
         className="p-4 rounded-full bg-slate-700 text-white hover:bg-slate-600 focus:outline-none fixed bottom-4"

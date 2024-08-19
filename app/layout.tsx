@@ -17,8 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-slate-50">
-        <div className="container mx-auto px-4 py-8 flex flex-col items-center bg-slate-300">
+      <body className="bg-slate-300">
+        <div className="container mx-auto px-4 py-8 flex flex-col items-center">
           <Image
             src="/images/nextword-logo.svg"
             alt="NextWords Logo"
