@@ -23,7 +23,7 @@ export default function RootLayout({
             src="/images/nextword-logo.svg"
             alt="NextWords Logo"
             width={200}
-            height={200}
+            height={25}
             className="mb-8"
           />
           {children}
