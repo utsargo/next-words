@@ -2,18 +2,17 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import wordList from "@/public/wordlists/ielts.json";
 
-export default function FlashCard() {
+export default function Flashcard() {
   const [wordData, setWordData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchNewWord = async () => {
     try {
-      // Fetch a random word from the random-word API
-      const randomWordResponse = await axios.get(
-        "https://random-word-api.herokuapp.com/word"
-      );
-      const randomWord = randomWordResponse.data[0]; // The word is returned as an array
+      // Choose a random word from the JSON word list
+      const randomWord =
+        wordList.words[Math.floor(Math.random() * wordList.words.length)];
 
       // Fetch the word details from the dictionary API
       const dictionaryResponse = await axios.get(
@@ -23,7 +22,7 @@ export default function FlashCard() {
       setError(null);
     } catch (err: any) {
       if (err.response && err.response.status === 404) {
-        // If the word is not found, fetch a new word
+        // If the word is not found, fetch another word
         fetchNewWord();
       } else {
         setError("Error fetching word data.");
@@ -34,7 +33,6 @@ export default function FlashCard() {
   useEffect(() => {
     fetchNewWord();
   }, []);
-
   return (
     <div className="flex flex-col items-center w-full md:w-3/5">
       <button
@@ -45,10 +43,8 @@ export default function FlashCard() {
       </button>
       {wordData ? (
         <div className="w-full flex flex-col items-center">
-          <h2 className="text-center text-3xl">{wordData.word}</h2>
-          <p>
-            <strong>Pronunciation:</strong> {wordData.phonetic}
-          </p>
+          <h2 className="text-center text-3xl my-2">{wordData.word}</h2>
+          <p className="mb-2">{wordData.phonetic}</p>
 
           {/* Render the audio player if audio is available */}
           {wordData.phonetics &&
