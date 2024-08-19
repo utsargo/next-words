@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
+import Header from "@/components/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "NextWords",
-  description: "A next.js app to learn new words.",
+  description: "A Next.js app to learn new words.",
 };
 
 export default function RootLayout({
@@ -17,17 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-slate-300">
-        <div className="container mx-auto px-4 py-8 flex flex-col items-center">
-          <Image
-            src="/images/nextword-logo.svg"
-            alt="NextWords Logo"
-            width={200}
-            height={25}
-            className="mb-8"
-          />
+      <body className="bg-slate-300 dark:bg-gray-900 text-black dark:text-white">
+        <Header />
+        <main className="container mx-auto px-4 pb-4 pt-2 flex flex-col items-center">
           {children}
-        </div>
+        </main>
       </body>
     </html>
   );

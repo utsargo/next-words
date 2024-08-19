@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import wordList from "@/public/wordlists/ielts.json";
@@ -11,11 +10,9 @@ export default function Flashcard() {
 
   const fetchNewWord = async () => {
     try {
-      // Choose a random word from the JSON word list
       const randomWord =
         wordList.words[Math.floor(Math.random() * wordList.words.length)];
 
-      // Fetch the word details from the dictionary API
       const dictionaryResponse = await axios.get(
         `https://api.dictionaryapi.dev/api/v2/entries/en/${randomWord}`
       );
@@ -23,8 +20,7 @@ export default function Flashcard() {
       setError(null);
     } catch (err: any) {
       if (err.response && err.response.status === 404) {
-        // If the word is not found, fetch another word
-        fetchNewWord();
+        fetchNewWord(); // Retry with another word if not found
       } else {
         setError("Error fetching word data.");
       }
@@ -36,13 +32,16 @@ export default function Flashcard() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center w-full md:w-[500px] min-h-[70vh] h-auto bg-slate-100 rounded-lg shadow p-4">
+    <div className="flex flex-col items-center w-full md:w-[500px] min-h-[70vh] h-auto bg-slate-100 dark:bg-gray-800 dark:text-white rounded-lg shadow p-4">
+      {/* Fetch new word button */}
       <button
         onClick={fetchNewWord}
-        className="p-4 rounded-full bg-slate-700 text-white hover:bg-slate-600 focus:outline-none fixed bottom-4"
+        className="p-4 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed bottom-4"
       >
         <ArrowPathIcon className="h-6 w-6" />
       </button>
+
+      {/* Display word information */}
       {wordData ? (
         <div className="w-full flex flex-col items-center">
           <h2 className="text-center text-3xl my-2 capitalize">
@@ -50,7 +49,7 @@ export default function Flashcard() {
           </h2>
           <p className="mb-2">{wordData.phonetic}</p>
 
-          {/* Render the audio player if audio is available */}
+          {/* Render the audio player if available */}
           {wordData.phonetics &&
           wordData.phonetics.length > 0 &&
           wordData.phonetics[0].audio ? (
@@ -61,7 +60,6 @@ export default function Flashcard() {
               </audio>
             </div>
           ) : (
-            // If no audio is available, show a button to search for the pronunciation on Google
             <a
               href={`https://www.google.com/search?q=${wordData.word}+pronunciation`}
               target="_blank"
@@ -72,9 +70,10 @@ export default function Flashcard() {
             </a>
           )}
 
+          {/* Display meanings, synonyms, and antonyms */}
           {wordData.meanings.map((meaning: any, index: number) => (
             <div className="w-full mb-2" key={index}>
-              <h4 className="text-slate-700 text-lg font-bold capitalize italic">
+              <h4 className="text-slate-700 dark:text-gray-300 text-lg font-bold capitalize italic">
                 {`[${meaning.partOfSpeech}]`}
               </h4>
               <p>{meaning.definitions[0].definition}</p>
