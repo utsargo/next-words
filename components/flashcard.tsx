@@ -53,8 +53,8 @@ export default function Flashcard() {
           {wordData.phonetics &&
           wordData.phonetics.length > 0 &&
           wordData.phonetics[0].audio ? (
-            <div>
-              <audio controls>
+            <div className="w-full flex justify-center">
+              <audio className="max-w-[80%]" controls>
                 <source src={wordData.phonetics[0].audio} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>

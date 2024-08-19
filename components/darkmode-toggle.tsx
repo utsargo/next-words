@@ -29,12 +29,12 @@ export default function DarkModeToggle() {
   return (
     <button
       onClick={toggleDarkMode}
-      className="p-2 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed md:top-4 bottom-4 right-4 top-auto md:bottom-auto"
+      className="p-2 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none relative md:fixed md:top-4 md:right-4"
     >
       {darkMode ? (
-        <SunIcon className="h-6 w-6" />
+        <SunIcon className="h-5 w-5 md:h-6 md:w-6" />
       ) : (
-        <MoonIcon className="h-6 w-6" />
+        <MoonIcon className="h-5 w-5 md:h-6 md:w-6" />
       )}
     </button>
   );
