@@ -29,7 +29,7 @@ export default function DarkModeToggle() {
   return (
     <button
       onClick={toggleDarkMode}
-      className="p-2 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed top-4 right-4"
+      className="p-2 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed md:top-4 bottom-4 right-4 top-auto md:bottom-auto"
     >
       {darkMode ? (
         <SunIcon className="h-6 w-6" />
