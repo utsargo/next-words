@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import wordList from "@/public/wordlists/ielts.json";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 export default function Flashcard() {
   const [wordData, setWordData] = useState<any>(null);
@@ -33,35 +34,48 @@ export default function Flashcard() {
   useEffect(() => {
     fetchNewWord();
   }, []);
+
   return (
-    <div className="flex flex-col items-center w-full md:w-3/5">
+    <div className="flex flex-col items-center w-full md:w-[500px] min-h-[90vh] h-auto bg-slate-100 rounded-lg shadow p-4">
       <button
-        className="bg-green-700 text-slate-50 text-2xl rounded hover:bg-green-600 p-2"
         onClick={fetchNewWord}
+        className="p-4 rounded-full bg-slate-700 text-white hover:bg-slate-600 focus:outline-none fixed bottom-4"
       >
-        New Word
+        <ArrowPathIcon className="h-6 w-6" />
       </button>
       {wordData ? (
         <div className="w-full flex flex-col items-center">
-          <h2 className="text-center text-3xl my-2">{wordData.word}</h2>
+          <h2 className="text-center text-3xl my-2 capitalize">
+            {wordData.word}
+          </h2>
           <p className="mb-2">{wordData.phonetic}</p>
 
           {/* Render the audio player if audio is available */}
           {wordData.phonetics &&
-            wordData.phonetics.length > 0 &&
-            wordData.phonetics[0].audio && (
-              <div>
-                <audio controls>
-                  <source src={wordData.phonetics[0].audio} type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            )}
+          wordData.phonetics.length > 0 &&
+          wordData.phonetics[0].audio ? (
+            <div>
+              <audio controls>
+                <source src={wordData.phonetics[0].audio} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          ) : (
+            // If no audio is available, show a button to search for the pronunciation on Google
+            <a
+              href={`https://www.google.com/search?q=${wordData.word}+pronunciation`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Search pronunciation on Google
+            </a>
+          )}
 
           {wordData.meanings.map((meaning: any, index: number) => (
             <div className="w-full mb-2" key={index}>
-              <h4 className="text-slate-800 text-lg font-bold">
-                {`(${meaning.partOfSpeech})`}
+              <h4 className="text-slate-700 text-lg font-bold capitalize italic">
+                {`[${meaning.partOfSpeech}]`}
               </h4>
               <p>{meaning.definitions[0].definition}</p>
               {meaning.definitions[0].example && (
