@@ -4,12 +4,25 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import wordList from "@/public/wordlists/ielts.json";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import Papa from "papaparse"; // CSV parsing library
+import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
 
 export default function Flashcard() {
   const [wordData, setWordData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [isFlipping, setIsFlipping] = useState(false);
   const [isButtonRotating, setIsButtonRotating] = useState(false);
+  const [customWordList, setCustomWordList] = useState<string[] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Fetch the custom wordlist from localStorage
+  useEffect(() => {
+    const storedWordList = localStorage.getItem("customWordList");
+    if (storedWordList) {
+      setCustomWordList(JSON.parse(storedWordList));
+    }
+    fetchNewWord();
+  }, []);
 
   const fetchNewWord = async () => {
     setIsFlipping(true); // Start card flip animation
@@ -17,8 +30,9 @@ export default function Flashcard() {
 
     setTimeout(async () => {
       try {
-        const randomWord =
-          wordList.words[Math.floor(Math.random() * wordList.words.length)];
+        // Choose a random word from either the custom wordlist or the default one
+        const words = customWordList || wordList.words;
+        const randomWord = words[Math.floor(Math.random() * words.length)];
 
         const dictionaryResponse = await axios.get(
           `https://api.dictionaryapi.dev/api/v2/entries/en/${randomWord}`
@@ -37,14 +51,69 @@ export default function Flashcard() {
     }, 300); // Duration of the animations
   };
 
-  useEffect(() => {
-    fetchNewWord();
-  }, []);
+  // Handle file upload and CSV parsing
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      Papa.parse(e.target.files[0], {
+        complete: (results: any) => {
+          const parsedWords = results.data.map((row: any) => row[0]); // Assuming one word per row
+          localStorage.setItem("customWordList", JSON.stringify(parsedWords));
+          setCustomWordList(parsedWords);
+          setIsModalOpen(false);
+        },
+        header: false,
+      });
+    }
+  };
+
+  // Handle resetting to the default wordlist
+  const handleResetWordList = () => {
+    localStorage.removeItem("customWordList");
+    setCustomWordList(null);
+    setIsModalOpen(false);
+    fetchNewWord(); // Fetch a new word from the default wordlist
+  };
 
   return (
     <>
+      {/* Modal for file upload and reset */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
+            <h2 className="text-xl font-bold mb-4 dark:text-white">
+              Wordlist Options
+            </h2>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="mb-4"
+            />
+            <button
+              onClick={handleResetWordList}
+              className="w-full p-2 mb-4 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Reset to Default Wordlist
+            </button>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="w-full p-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Button to open the modal */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="p-2 mb-4 bg-slate-500 text-white rounded hover:bg-slate-600 right-4 bottom-4 fixed"
+      >
+        <AdjustmentsVerticalIcon className="h-5 w-5" />
+      </button>
+      {/* Flashcard container */}
       <div
-        className={`flex flex-col items-center w-full md:w-[500px] min-h-[70vh] h-auto bg-slate-100 dark:bg-gray-800 dark:text-white rounded-lg shadow p-4 transition-transform ${
+        className={`flex flex-col items-center w-full md:w-[500px] min-h-[70vh] h-auto bg-slate-100 dark:bg-gray-800 dark:text-white rounded-lg shadow p-4 transition-transform duration-500 ${
           isFlipping ? "rotate-y-180" : ""
         }`}
       >
@@ -108,9 +177,11 @@ export default function Flashcard() {
           error && <p>{error}</p>
         )}
       </div>
+
+      {/* Fetch new word button */}
       <button
         onClick={fetchNewWord}
-        className={`p-4 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed bottom-4 transition-transform ${
+        className={`p-4 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed bottom-4 transition-transform duration-500 ${
           isButtonRotating ? "rotate-button" : ""
         }`}
       >
