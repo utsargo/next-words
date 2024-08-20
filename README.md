@@ -58,8 +58,8 @@ https://next-words-roy.vercel.app/
 
 ```bash
 Copy code
-git clone https://github.com/yourusername/vocabulary-app.git
-cd vocabulary-app
+git clone https://github.com/utsargo/next-words.git
+cd next-words
 ```
 
 2. **Install Dependencies**

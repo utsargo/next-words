@@ -136,7 +136,7 @@ export default function Flashcard() {
       {/* Button to open the modal */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="p-2 mb-4 bg-slate-500 text-white rounded hover:bg-slate-600 right-4 bottom-4 fixed"
+        className="p-2 bg-slate-500 text-white rounded hover:bg-slate-600 right-4 bottom-4 fixed"
       >
         <AdjustmentsVerticalIcon className="h-5 w-5" />
       </button>
