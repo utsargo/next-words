@@ -4,27 +4,27 @@
 
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Technologies Used](#technologies-used)
-4. [Live Demo](#live-demo)
-5. [Getting Started](#getting-started)
+3. [Upcoming Features](#upcoming-features)
+4. [Technologies Used](#technologies-used)
+5. [Live Demo](#live-demo)
+6. [Getting Started](#getting-started)
    - [Prerequisites](#prerequisites)
    - [Installation](#installation)
-6. [Usage](#usage)
+7. [Usage](#usage)
    - [Uploading a CSV File](#uploading-a-csv-file)
    - [Pasting a Word List](#pasting-a-word-list)
    - [Resetting to Default Word List](#resetting-to-default-word-list)
-   - [Upcoming Features](#upcoming-features)
-7. [Components](#components)
-8. [File Structure](#file-structure)
-9. [Contributing](#contributing)
-10. [License](#license)
-11. [Contact](#contact)
+8. [Components](#components)
+9. [File Structure](#file-structure)
+10. [Contributing](#contributing)
+11. [License](#license)
+12. [Contact](#contact)
 
 ## Overview
 
 The NextWords is a flashcard-based application designed to help users learn and practice vocabulary. It fetches random words and their definitions from an API, allowing users to view pronunciations, meanings, synonyms, and antonyms. The app also supports custom word lists, enabling users to upload or paste their own vocabulary sets.
 
-##Features
+## Features
 
 - **Flashcard Display**: Show a random word with its pronunciation, definition, synonyms, and antonyms.
 - **Audio Pronunciation**: Play audio pronunciations for words if available.
@@ -32,6 +32,10 @@ The NextWords is a flashcard-based application designed to help users learn and 
 - **Default Word List**: Use a default set of words when no custom list is provided.
 - **Word List Management**: Add, replace, or reset custom word lists.
 - **Responsive Design**: Suitable for various screen sizes, including mobile devices.
+
+## Upcoming Features
+
+1. Search a word and append it to the wordlist in the locastorage
 
 ## Technologies Used
 
@@ -52,7 +56,7 @@ https://next-words-roy.vercel.app/
 - Node.js and npm/yarn installed on your machine.
 - Basic knowledge of React and Next.js.
 
-###Installation
+### Installation
 
 1. **Clone the Repository**
 
@@ -107,10 +111,6 @@ Open `http://localhost:3000` in your browser to view the app.
 
 1. Click the settings button (⚙️) in the bottom right corner of the app.
 2. In the modal, click "Reset to Default Wordlist" to remove the custom list and revert to the default.
-
-### Upcoming Features
-
-1. Search a word and append it to the wordlist in the locastorage
 
 ## Components
 

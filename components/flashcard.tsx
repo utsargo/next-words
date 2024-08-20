@@ -81,6 +81,21 @@ export default function Flashcard() {
     setPasteInput("");
     setIsModalOpen(false);
   };
+  // Function to export the current word list from localStorage
+  const exportWordList = () => {
+    const wordListToExport = customWordList || wordList.words;
+    const csvContent =
+      "data:text/csv;charset=utf-8," + wordListToExport.join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "wordlist.csv");
+    document.body.appendChild(link);
+
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Handle resetting to the default wordlist
   const handleResetWordList = () => {
@@ -98,12 +113,13 @@ export default function Flashcard() {
             <h2 className="text-xl font-bold mb-4 dark:text-white">
               Wordlist Options
             </h2>
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-              className="mb-4"
-            />
+            <div className="flex flex-col gap-1 mb-4">
+              <input type="file" accept=".csv" onChange={handleFileUpload} />
+              <p className="italic">
+                <small>Upload a CSV file</small>
+              </p>
+            </div>
+            <p className="mb-4">Or</p>
             <textarea
               value={pasteInput}
               onChange={(e) => setPasteInput(e.target.value)}
@@ -113,10 +129,17 @@ export default function Flashcard() {
             />
             <button
               onClick={handlePasteInput}
-              className="w-full p-2 mb-4 bg-green-500 text-white rounded hover:bg-green-600"
+              className="w-full p-2 mb-4 bg-green-600 text-white rounded hover:bg-green-700"
             >
               Save Pasted Word List
             </button>
+            <button
+              onClick={exportWordList}
+              className="w-full p-2 mb-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Export Current Wordlist
+            </button>
+
             <button
               onClick={handleResetWordList}
               className="w-full p-2 mb-4 bg-red-500 text-white rounded hover:bg-red-600"
