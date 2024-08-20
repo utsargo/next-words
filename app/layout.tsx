@@ -28,7 +28,7 @@ export default function RootLayout({
           href="https://github.com/utsargo/next-words/blob/main/README.md"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full p-2 fixed left-4 bottom-4 text-slate-50 bg-slate-600"
+          className="rounded p-2 fixed left-4 bottom-4 text-slate-50 bg-slate-600"
         >
           <DocumentTextIcon className="h-5 w-5 md:h-6 md:w-6" />
         </Link>
