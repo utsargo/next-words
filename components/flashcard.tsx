@@ -57,14 +57,28 @@ export default function Flashcard() {
   // Handle file upload and CSV parsing
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      Papa.parse(e.target.files[0], {
+      const file = e.target.files[0];
+
+      Papa.parse(file, {
         complete: (results: any) => {
-          const parsedWords = results.data.map((row: any) => row[0]); // Assuming one word per row
-          localStorage.setItem("customWordList", JSON.stringify(parsedWords));
-          setCustomWordList(parsedWords);
-          setIsModalOpen(false);
+          const parsedWords = results.data
+            .map((row: any) => row[0]?.trim()) // Ensures words are trimmed and not undefined
+            .filter(Boolean); // Removes any empty strings or falsy values
+
+          if (parsedWords.length > 0) {
+            localStorage.setItem("customWordList", JSON.stringify(parsedWords));
+            setCustomWordList(parsedWords);
+            setIsModalOpen(false);
+          } else {
+            alert("The uploaded CSV file is empty or not formatted correctly.");
+          }
+        },
+        error: (error) => {
+          console.error("Error parsing CSV file:", error);
+          alert("An error occurred while parsing the CSV file.");
         },
         header: false,
+        skipEmptyLines: true, // Skips empty lines in the CSV
       });
     }
   };
@@ -108,10 +122,7 @@ export default function Flashcard() {
   return (
     <>
       {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={() => setIsModalOpen(false)}
-        >
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
             <h2 className="text-xl font-bold mb-4 dark:text-white">
               Wordlist Options
