@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import wordList from "@/public/wordlists/ielts.json";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import Papa from "papaparse"; // CSV parsing library
-import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowPathIcon,
+  AdjustmentsVerticalIcon,
+} from "@heroicons/react/24/solid";
+import Papa from "papaparse";
 
 export default function Flashcard() {
   const [wordData, setWordData] = useState<any>(null);
@@ -14,6 +16,7 @@ export default function Flashcard() {
   const [isButtonRotating, setIsButtonRotating] = useState(false);
   const [customWordList, setCustomWordList] = useState<string[] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pasteInput, setPasteInput] = useState<string>("");
 
   // Fetch the custom wordlist from localStorage
   useEffect(() => {
@@ -66,6 +69,19 @@ export default function Flashcard() {
     }
   };
 
+  // Handle pasted input
+  const handlePasteInput = () => {
+    // Split by comma or new line, trim whitespace
+    const words = pasteInput
+      .split(/[\n,]+/)
+      .map((word) => word.trim())
+      .filter(Boolean);
+    localStorage.setItem("customWordList", JSON.stringify(words));
+    setCustomWordList(words);
+    setPasteInput("");
+    setIsModalOpen(false);
+  };
+
   // Handle resetting to the default wordlist
   const handleResetWordList = () => {
     localStorage.removeItem("customWordList");
@@ -76,7 +92,7 @@ export default function Flashcard() {
 
   return (
     <>
-      {/* Modal for file upload and reset */}
+      {/* Modal for file upload, paste input, and reset */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
@@ -89,6 +105,19 @@ export default function Flashcard() {
               onChange={handleFileUpload}
               className="mb-4"
             />
+            <textarea
+              value={pasteInput}
+              onChange={(e) => setPasteInput(e.target.value)}
+              placeholder="Paste your word list here, separated by commas or one word per line"
+              className="w-full p-2 border rounded mb-4 text-slate-900"
+              rows={4}
+            />
+            <button
+              onClick={handlePasteInput}
+              className="w-full p-2 mb-4 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Save Pasted Word List
+            </button>
             <button
               onClick={handleResetWordList}
               className="w-full p-2 mb-4 bg-red-500 text-white rounded hover:bg-red-600"
