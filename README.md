@@ -61,7 +61,6 @@ https://next-words-roy.vercel.app/
 1. **Clone the Repository**
 
 ```bash
-Copy code
 git clone https://github.com/utsargo/next-words.git
 cd next-words
 ```
@@ -69,7 +68,6 @@ cd next-words
 2. **Install Dependencies**
 
 ```bash
-Copy code
 npm install
 # or
 yarn install
