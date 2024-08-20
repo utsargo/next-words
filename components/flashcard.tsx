@@ -92,7 +92,6 @@ export default function Flashcard() {
 
   return (
     <>
-      {/* Modal for file upload, paste input, and reset */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
@@ -155,11 +154,17 @@ export default function Flashcard() {
             <p className="mb-2">{wordData.phonetic}</p>
 
             {/* Render the audio player if available */}
+
+            {/* Render the audio player if available */}
             {wordData.phonetics &&
             wordData.phonetics.length > 0 &&
             wordData.phonetics[0].audio ? (
               <div className="w-full flex justify-center">
-                <audio className="max-w-[80%]" controls>
+                <audio
+                  key={wordData.phonetics[0].audio} // This ensures the audio player is re-rendered with the new audio source
+                  className="max-w-[80%]"
+                  controls
+                >
                   <source src={wordData.phonetics[0].audio} type="audio/mpeg" />
                   Your browser does not support the audio element.
                 </audio>
