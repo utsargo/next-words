@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 3D rotation for the flashcard */
+.rotate-y-180 {
+  transform: rotateY(90deg);
+  backface-visibility: hidden;
+}
+
+/* 2D rotation for the button */
+.rotate-button {
+  transform: rotate(360deg);
+}
+
+/* Smoother transitions */
+.transition-transform {
+  transition: transform 0.3s ease-in-out;
+}
