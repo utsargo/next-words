@@ -8,6 +8,7 @@ import {
   AdjustmentsVerticalIcon,
 } from "@heroicons/react/24/solid";
 import Papa from "papaparse";
+import Link from "next/link";
 
 export default function Flashcard() {
   const [wordData, setWordData] = useState<any>(null);
@@ -128,10 +129,13 @@ export default function Flashcard() {
               Wordlist Options
             </h2>
             <div className="flex flex-col gap-1 mb-4">
-              <input type="file" accept=".csv" onChange={handleFileUpload} />
-              <p className="italic">
-                <small>Upload a CSV file</small>
-              </p>
+              <label htmlFor="fileInput">Upload a CSV file:</label>
+              <input
+                type="file"
+                id="fileInput"
+                accept=".csv"
+                onChange={handleFileUpload}
+              />
             </div>
             <p className="mb-4">Or</p>
             <textarea
@@ -142,12 +146,14 @@ export default function Flashcard() {
               rows={4}
             />
             <button
+              title="Save Pasted Word List"
               onClick={handlePasteInput}
               className="w-full p-2 mb-4 bg-green-600 text-white rounded hover:bg-green-700"
             >
               Save Pasted Word List
             </button>
             <button
+              title="Export Current Wordlist"
               onClick={exportWordList}
               className="w-full p-2 mb-4 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
@@ -155,6 +161,7 @@ export default function Flashcard() {
             </button>
 
             <button
+              title="Reset to Default Wordlist"
               onClick={handleResetWordList}
               className="w-full p-2 mb-4 bg-red-500 text-white rounded hover:bg-red-600"
             >
@@ -171,6 +178,7 @@ export default function Flashcard() {
       )}
       {/* Button to open the modal */}
       <button
+        title="Wordlist Options"
         onClick={() => setIsModalOpen(true)}
         className="p-2 bg-slate-500 text-white rounded hover:bg-slate-600 right-4 bottom-4 fixed"
       >
@@ -207,14 +215,14 @@ export default function Flashcard() {
                 </audio>
               </div>
             ) : (
-              <a
+              <Link
                 href={`https://www.google.com/search?q=${wordData.word}+pronunciation`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 Search pronunciation on Google
-              </a>
+              </Link>
             )}
 
             {/* Display meanings, synonyms, and antonyms */}
@@ -243,6 +251,14 @@ export default function Flashcard() {
                 )}
               </div>
             ))}
+            <Link
+              href={`https://www.dictionary.com/browse/${wordData.word}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"
+            >
+              More on Dictionary.com
+            </Link>
           </div>
         ) : (
           error && <p>{error}</p>
@@ -251,6 +267,7 @@ export default function Flashcard() {
 
       {/* Fetch new word button */}
       <button
+        title="Fetch New Word"
         onClick={fetchNewWord}
         className={`p-4 rounded-full bg-slate-700 dark:bg-gray-600 text-white hover:bg-slate-600 dark:hover:bg-gray-500 focus:outline-none fixed bottom-4 transition-transform duration-500 ${
           isButtonRotating ? "rotate-button" : ""
