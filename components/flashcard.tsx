@@ -29,6 +29,26 @@ export default function Flashcard() {
   }, []);
 
   const fetchNewWord = async () => {
+    if (!navigator.onLine) {
+      // Offline mode: use saved word data
+      const savedWords = JSON.parse(
+        localStorage.getItem("browsedWords") || "[]"
+      );
+      if (savedWords.length > 0) {
+        const randomIndex = Math.floor(Math.random() * savedWords.length);
+        setWordData(savedWords[randomIndex]);
+        setError(null); // Clear any previous error
+      } else {
+        setError(
+          "No word data available offline. Please go online to fetch words."
+        );
+      }
+      setIsFlipping(false);
+      setIsButtonRotating(false);
+      return;
+    }
+
+    // Online mode: Fetch from API
     setIsFlipping(true); // Start card flip animation
     setIsButtonRotating(true); // Start button rotate animation
 
@@ -41,8 +61,16 @@ export default function Flashcard() {
         const dictionaryResponse = await axios.get(
           `https://api.dictionaryapi.dev/api/v2/entries/en/${randomWord}`
         );
+
         setWordData(dictionaryResponse.data[0]);
         setError(null);
+
+        // Save word data to local storage
+        const savedWords = JSON.parse(
+          localStorage.getItem("browsedWords") || "[]"
+        );
+        savedWords.push(dictionaryResponse.data[0]);
+        localStorage.setItem("browsedWords", JSON.stringify(savedWords));
       } catch (err: any) {
         if (err.response && err.response.status === 404) {
           fetchNewWord(); // Retry with another word if not found
@@ -96,6 +124,7 @@ export default function Flashcard() {
     setPasteInput("");
     setIsModalOpen(false);
   };
+
   // Function to export the current word list from localStorage
   const exportWordList = () => {
     const wordListToExport = customWordList || wordList.words;
@@ -197,8 +226,6 @@ export default function Flashcard() {
               {wordData.word}
             </h2>
             <p className="mb-2">{wordData.phonetic}</p>
-
-            {/* Render the audio player if available */}
 
             {/* Render the audio player if available */}
             {wordData.phonetics &&
